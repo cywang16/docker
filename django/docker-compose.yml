@@ -1,0 +1,19 @@
+#
+# create django project:
+# docker-compose run web django-admin.py startproject composeexample .
+#
+version: '2'
+
+services:
+  db:
+    image: postgres
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:900
+    volumes:
+      - .:/code
+    ports:
+      - "900:900"
+    depends_on:
+      - db

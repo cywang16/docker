@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  tomcat_keycloak:
+    build: .
+    ports:
+      - "880:8080"
+    volumes:
+      - /home/cywang/Shares:/mnt/shares
