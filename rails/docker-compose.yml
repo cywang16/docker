@@ -1,0 +1,19 @@
+#
+# touch Gemfile.lock
+# docker-compose run web rails new . --force --database=postgresql --skip-bundle
+# sudo chown -R $USER:$USER .
+# docker-compose build (if Gemfile is modified)
+
+version: '2'
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/myapp
+    ports:
+      - "930:3000"
+    depends_on:
+      - db

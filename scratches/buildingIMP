@@ -1,0 +1,319 @@
+#!/bin/bash
+
+function win32path()
+{
+    local inputDir=$1
+    inputDir=`cygpath -p -w $inputDir`
+    inputDir=${inputDir//\\/\\\\}
+    echo $inputDir
+}
+
+pushd `dirname $0` > /dev/null
+scriptroot=`pwd`
+popd > /dev/null
+
+echo get param and option settings
+source <(grep = $scriptroot/settingbuilding)
+
+echo $1
+MyPROJECT=`echo $1 | tr 'A-Z' 'a-z'`
+echo building $MyPROJECT
+echo $# arguments
+if (($# >= 2)); then
+    extra=$2
+fi
+
+IPs=`hostname -I`
+myIPs=($IPs)
+# echo ${myIPs[1]}
+for ip in "${myIPs[@]}"
+do
+    echo $ip
+done
+
+case $MyPROJECT in
+    vibedocker)
+	# sudo ./building stopvibe
+	# ping -c 3 $(hostname)
+	# sudo ./building deletevibe
+	# ping -c 3 $(hostname)
+	project=vibe
+	platform=X64_Linux_2.6.32.279.22.1_GLIBC.2.12.1.80
+	buildtype=Debug
+	inputtype=`echo $2 | tr 'A-Z' 'a-z'`
+	if [[ $inputtype == rel* ]]; then buildtype=Release; fi
+	# dataTemplate=/mnt/warehouse/release/Projects/SDK/Vibe/data/*/Superset/VBTVibeDataRelease.tgz
+	# privatedatabuild=/mnt/warehouse/release/Projects/SDK/Vibe/private-data/0050/Superset/VBTVibeDataRelease.tgz
+	# binTemplate=/mnt/warehouse/release/Projects/SDK/PythiaMain/bin/*/Log/$platform/$buildtype/VBTPythiaSDK.tgz
+	# agentlibsTemplate=/mnt/warehouse/release/Projects/SDK/Vibe/agentlibs/*/AgentLibs/Log/$platform/$buildtype/VBTVibeAgentLibs.tgz
+	# supportfilestgz=/mnt/filer/software/Shares/Vibe/VBTVibeMobileSupportFiles.tgz
+	# zhCNcriteriaDbs=/mnt/warehouse/release/Projects/SDK/Vibe/CriteriaDBs/zh-CN
+	echo platform $platform
+	# echo dataTemplate $dataTemplate0/*/$dataTemplate1
+	# echo binTemplate $binTemplate0/*/$binTemplate1
+	# echo agentlibsTemplate $agentlibsTemplate0/*/$agentlibsTemplate1
+	if [ -n "$privatedatabuild" ] && [ $privatedatabuild != '0' ]
+	then
+	    latestdata=$privatedatabuild
+	else
+    	    latestdata=$dataTemplate0/`ls $dataTemplate0 -t | head -1`/$dataTemplate1
+	fi
+	echo latestdata $latestdata
+	latestbin=$binTemplate0/`ls $binTemplate0 -t | head -1`/$binTemplate1
+	echo latestbin $latestbin
+	latestagentlibs=$agentlibsTemplate0/`ls $agentlibsTemplate0 -t | head -1`/$agentlibsTemplate1
+	echo latestagentlibs $latestagentlibs
+	workplace=$scriptroot/oneboxnlu/$project
+	# if [ ! -d $workplace ]; then mkdir -p $workplace; fi
+	pythiamain=$scriptroot/PythiaMain
+	# pushd ~
+	# ./setupdir.sh $project
+	# popd
+	if [ ! -d $workplace/nludata ]; then mkdir -p $workplace/nludata; fi
+	echo tar zxf $latestdata -C $workplace/nludata VoiceBox/data --strip-components=1
+	tar zxf $latestdata -C $workplace/nludata VoiceBox/data --strip-components=1
+	if [ ! -d $workplace/sdklib ]; then mkdir -p $workplace/sdklib; fi
+	echo tar zxf $latestbin -C $workplace/sdklib VoiceBox/lib --strip-components=2
+	tar zxf $latestbin -C $workplace/sdklib VoiceBox/lib --strip-components=2
+	if [ ! -d $workplace/agentlib ]; then mkdir -p $workplace/agentlib; fi
+	echo tar zxf $latestagentlibs -C $workplace/agentlib VoiceBox/lib --strip-components=2
+	tar zxf $latestagentlibs -C $workplace/agentlib VoiceBox/lib --strip-components=2
+	echo tar zxf $supportfilestgz -C $workplace/nludata VoiceBox/data --strip-components=1
+	tar zxf $supportfilestgz -C $workplace/nludata VoiceBox/data --strip-components=1
+	echo rm $workplace/nludata/data/ZH/zh-CN/*vbtindex
+	rm $workplace/nludata/data/ZH/zh-CN/*vbtindex
+	for p in $zhCNcriteriaDbs/*; do
+	    echo criteria db folder $p
+	    dbSrc=`ls $p -t | head -1 | sed 's/:$//'`
+	    echo cp $p/$dbSrc/* $workplace/nludata/data/ZH/zh-CN
+	    cp $p/$dbSrc/* $workplace/nludata/data/ZH/zh-CN
+	done
+	if [ ! -d $workplace/external/conf ]; then mkdir -p $workplace/external/conf; fi
+	if [ -n "$3" ]
+	then
+	    echo cp $pythiamain/external/conf/vbtnlusupervisor.log.config $workplace/external/conf/vbtnlusupervisor.config
+	    cp $pythiamain/external/conf/vbtnlusupervisor.log.config $workplace/external/conf/vbtnlusupervisor.config
+	else
+	    echo cp $pythiamain/external/conf/vbtnlusupervisor.config $workplace/external/conf/vbtnlusupervisor.config
+	    cp $pythiamain/external/conf/vbtnlusupervisor.config $workplace/external/conf/vbtnlusupervisor.config
+	fi
+	echo cp $pythiamain/external/conf/orchestrator.config $workplace/external/conf/orchestrator.config
+	cp $pythiamain/external/conf/orchestrator.config $workplace/external/conf/orchestrator.config
+	./building vibeplm
+	# ./building startvibe
+	;;
+    startvibe)
+	culture=zh-CN
+	appid=vibe
+	project=vibe
+	NLUROOT=$scriptroot/oneboxnlu/$project
+	logfolder=$NLUROOT/log
+	sudo docker run -d --privileged --cpu-shares 2 -m 6442450944 -p 443:443/tcp -p 8091:8091/tcp -p 9000:9000/tcp -p 80:80/tcp -p 9090:9090/tcp -e ENV_CULTURE=$culture -e ENV_APPID=$appid -e ENV_SKU= --net bridge --hostname=localtest --entrypoint /bin/bash -v $NLUROOT/sdklib:/opt/voicebox/vbtserver/sdklib:ro -v $NLUROOT/agentlib:/opt/voicebox/vbtserver/agentlib:rw -v $NLUROOT/nludata/data:/opt/voicebox/nludata/data:ro -v $NLUROOT/personaldata:/mnt/nfs/voicebox/data:rw -v $NLUROOT/external/conf:/opt/voicebox/external/conf:ro -v $logfolder:/var/log/voicebox:rw -v /dev:/dev:rw vbtartifactory.voiceboxtechnologies.com/oneboxnlu:v1.5 -c /opt/voicebox/setup/testmachine/scripts/startup.sh
+	echo healthcheck - http://${myIPs[0]}:9090/vbtnlusupervisor/healthcheck
+	echo send text url - https://${myIPs[0]}/v4/vbtsvc/en-us/text/json
+	$scriptroot/building listcos
+	echo please wait for about one minute for everything to start
+	;;
+    startvibeplm)
+	culture=zh-CN
+	appid=vibe
+	project=vibe
+	NLUROOT=$scriptroot/oneboxnlu/$project
+	logfolder=$NLUROOT/log
+	sudo docker run -d --privileged --cpu-shares 2 -m 6442450944 -p 443:443/tcp -p 8091:8091/tcp -p 9000:9000/tcp -p 80:80/tcp -p 9090:9090/tcp -e ENV_CULTURE=$culture -e ENV_APPID=$appid -e ENV_SKU= --net bridge --hostname=localtest --entrypoint /bin/bash -v $NLUROOT/sdklib:/opt/voicebox/vbtserver/sdklib:ro -v $NLUROOT/agentlib:/opt/voicebox/vbtserver/agentlib:rw -v $NLUROOT/nludata/data:/opt/voicebox/nludata/data:ro -v $NLUROOT/personaldata:/mnt/nfs/voicebox/data:rw -v $NLUROOT/external/conf:/opt/voicebox/external/conf:ro -v $logfolder:/var/log/voicebox:rw -v /dev:/dev:rw oneboxplm -c /opt/voicebox/setup/testmachine/scripts/startup.sh
+	echo healthcheck - http://${myIPs[0]}:9090/vbtnlusupervisor/healthcheck
+	echo send text url - https://${myIPs[0]}/v4/vbtsvc/en-us/text/json
+	$scriptroot/building listcos
+	echo please wait for about one minute for everything to start
+	;;
+    hgfs)
+	# vmware-config-tools.pl -d --clobber-kernel-modules=vmhgfs
+	sudo vmware-config-tools.pl
+	;;
+    deletevibe)
+	# need sudo
+	project=vibe
+	workplace=/home/oneboxtest/testdata/oneboxnlu/$project
+	./building stopvibe
+	echo rm -rf $workplace
+	rm -rf $workplace
+	echo done deleting vibe
+	;;
+    stopvibe)
+	# need sudo
+	dockerId=`docker ps -q`
+	if [ -n "$dockerId" ]
+	then
+	    echo dockerId=$dockerId
+	    echo docker stop $dockerId
+	    docker stop $dockerId
+	else
+	    echo Docker is not running
+	fi
+	echo done stopping vibe
+	;;
+    restartvibe)
+	./building stopvibe
+	ping -c 10 $(hostname)
+	./building startvibe
+	;;
+    stopvibealbert)
+	# need sudo
+	docker ps | grep oneboxnlu | awk '{print $1}' | xargs docker stop
+	;;
+    vibeplm)
+	# need sudo
+	project=vibe
+	culture=zh-CN
+	appId=vibe
+	usr1=VAC
+	usr2=TST
+	userId=VACTSTSTAMP
+	id=userdevice_0
+	echo pushd /home/oneboxtest/testdata/oneboxnlu/$project
+	pushd ~/testdata/oneboxnlu/$project
+	# sudo /opt/voicebox-pythia-updatepersonaldata-application/VBTUpdateNLUPLM --culture=$culture --data-directory=./personaldata/onestoptest/$usr1/$usr2/$userId/$id/ baseline /mnt/filer/software/Shares/chunyenw/Vibe/E2E/PLM/zh-CN/PythiaBaselineInput.json
+	sudo /opt/voicebox-pythia-updatepersonaldata-application/VBTUpdateNLUPLM --culture=$culture --data-directory=./personaldata/$project/$usr1/$usr2/$userId/$id/ baseline /mnt/filer/software/Shares/chunyenw/Vibe/E2E/PLM/zh-CN/PythiaBaselineInput.json -r /opt/voicebox-pythia-updatepersonaldata-application/Rules/
+	;;
+    copylog)
+	project=vibe
+	echo $(date +%s)
+	echo $(date +%T)
+	logdir=/mnt/hgfs/TEMP/OneBoxLog/$(date +%Y%m%d%H%M%S)
+	echo $logdir
+	test -d "$logdir" || mkdir -p "$logdir" && cp -r ~/testdata/oneboxnlu/$project/log "$logdir"
+	;;
+    newscript)
+	echo cp /mnt/filer/software/Shares/chunyenw/TEMP/building ~
+	cp /mnt/filer/software/Shares/chunyenw/TEMP/building ~
+	echo cp /mnt/filer/software/Shares/chunyenw/TEMP/settingbuilding ~
+	cp /mnt/filer/software/Shares/chunyenw/TEMP/settingbuilding ~
+	;;
+    #############################
+    ## docker related commands ##
+    #############################
+    dinfo)
+	sudo docker info
+	;;
+    listim)
+	sudo docker images
+	;;
+    delims)
+	echo delete all images
+	sudo docker rmi $(sudo docker images -q)
+	;;
+    rmim)
+	echo delete one image
+	shift
+	while (( "$#" ))
+	do
+	    sudo docker rmi -f $1
+	    shift
+	done
+	;;
+    inspect)
+	sudo docker inspect $2
+	;;
+    listcos)
+	sudo docker ps -a
+	;;
+    delallcos)
+	echo delete all docker containers
+	sudo docker rm $(sudo docker ps -aq)
+	;;
+    runco)
+	echo rerun a docker container
+	sudo docker restart $2
+	;;
+    stopco)
+	echo stop a docker container
+	sudo docker stop $2
+	;;
+    bashco)
+	echo start a bash in a container
+	sudo docker exec -it $2 bash
+	;;
+    rmco)
+	echo stop and delete a docker container
+	shift
+	while (( "$#" ))
+	do
+	    sudo docker stop $1
+	    sudo docker rm $1
+	    shift
+	done
+	;;
+    dcbuild)
+	echo sudo docker-compose build
+	sudo docker-compose build
+	;;
+    dcup)
+	echo sudo docker-compose up -d
+	sudo docker-compose up -d
+	;;
+    dcdown)
+	echo sudo docker-compose down
+	sudo docker-compose down
+	;;
+    dcstop)
+	echo sudo docker-compose stop
+	sudo docker-compose stop
+	;;
+    devicesvc)
+	sudo docker run -e POSTGRES_PORT_5432_TCP_ADDR=localhost \
+	       -e POSTGRES_DATABASE=keycloak -e POSTGRES_USER=keycloak \
+	       -e POSTGRES_PASSWORD=keycloak -e SERVICE_KEYCLOAK_URL=http://localhost:10001 \
+	       -e KEYCLOAK_ADMIN_USER=admin -e KEYCLOAK_ADMIN_PASSWORD=admin \
+	       -e KEYCLOAK_ADMIN_CLIENT=admin-cli -e KEYCLOAK_DEVICE_CLIENT=devices \
+	       -e KEYCLOAK_DEVICE_PREFIX=vbtdevicetest -e KEYCLOAK_ADMIN_REALM=master \
+	       -p 10003:8080 \
+	       -d voicebox/vcpdevicesvc:4.1.5.20160808.0
+	;;
+    training)
+	echo start training service
+	echo http://${myIPs[0]}/v1/training_service/healthCheck
+	echo http://${myIPs[0]}/v1/training_service/readyStatus
+	sudo docker run -d -p 80:38080 jarx
+	$scriptroot/building listcos
+	;;
+    dataportal)
+	echo create a dataportal container and execute
+	echo pull the image from vbtartifactory.voiceboxtechnologies.com
+	echo if launch fine, the entry page is http://${myIPs[0]}/dataportal/admin/doc/index.html
+	echo healthcheck page is http://${myIPs[0]}/dataportal/healthcheck/
+	sudo docker run -d -p 80:80 -v /mnt/hgfs/TEMP:/mnt/out:rw vbtartifactory.voiceboxtechnologies.com/dataportal:2.1.60819.2
+	$scriptroot/building listcos
+	;;
+    dockerfind)
+	sudo docker search $2
+	;;
+    sweditor)
+	sudo docker run -d -p 80:8080 swaggerapi/swagger-editor
+	;;
+    tutorial)
+	# yes "" | ./Phoenix_Dev_Branch/vbtsource/ServerBuildSupport/BuildPrivateData -c data -p Tutorial -d Phoenix_Dev_Branch
+	echo script execution testing
+	pwd
+	ls -al
+	;;
+    scratches)
+	# export INCLUDE=D:/WinDDK/7600.16385.1/inc/atl71\ D:/WinDDK/7600.16385.1/inc/mfc42
+	# export LIB=D:/WinDDK/7600.16385.1/lib/ATL/i386\ D:/WinDDK/7600.16385.1/lib/Mfc/i386
+	# mv /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.exe /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.exe.bak
+	# mv /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.pdb /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.pdb.bak
+	# cp /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Release/Static/UTF8/VBTInitDB/VBTInitDB.exe /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/
+	# cp /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Release/Static/UTF8/VBTInitDB/VBTInitDB.pdb /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/
+	# rm /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.exe
+	# rm /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.pdb
+	# mv /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.exe.bak /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.exe
+	# mv /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.pdb.bak /cygdrive/c/SVN/Pendragon/vbtsource/VBTCore/Tools/tools/X86_Win32_5.1_MSVCRT.9.0/Debug/Static/UTF8/VBTInitDB/VBTInitDB.pdb
+	# yes "" | ./Pendragon/vbtsource/NaviBuildSupport/BuildData -p Pendragon -d Pendragon
+	# yes "" | ./BuildData -p Pendragon -d Pendragon
+	;;
+    *)
+	echo default output $MyPROJECT
+	echo pwd: `pwd`
+	echo script source: ${BASH_SOURCE[0]}
+	echo script path: $( dirname "${BASH_SOURCE[0]}" )
+	;;
+esac
