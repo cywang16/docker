@@ -1,2 +1,67 @@
 // prompt setting
 export PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\t$ "
+
+// useful docker scripts
+    dinfo)
+	sudo docker info
+	;;
+    listim)
+	sudo docker images
+	;;
+    delims)
+	echo delete all images
+	sudo docker rmi $(sudo docker images -q)
+	;;
+    rmim)
+	echo delete one image
+	shift
+	while (( "$#" ))
+	do
+	    sudo docker rmi -f $1
+	    shift
+	done
+	;;
+    inspect)
+	sudo docker inspect $2
+	;;
+    listcos)
+	sudo docker ps -a
+	;;
+    delallcos)
+	echo delete all docker containers
+	sudo docker rm $(sudo docker ps -aq)
+	;;
+    runco)
+	echo rerun a docker container
+	sudo docker restart $2
+	;;
+    stopco)
+	echo stop a docker container
+	sudo docker stop $2
+	;;
+    bashco)
+	echo start a bash in a container
+	sudo docker exec -it $2 bash
+	;;
+    rmco)
+	echo stop and delete a docker container
+	shift
+	while (( "$#" ))
+	do
+	    sudo docker stop $1
+	    sudo docker rm $1
+	    shift
+	done
+	;;
+    dcup)
+	echo sudo docker-compose up -d
+	sudo docker-compose up -d
+	;;
+    dcdown)
+	echo sudo docker-compose down
+	sudo docker-compose down
+	;;
+    dcstop)
+	echo sudo docker-compose stop
+	sudo docker-compose stop
+	;;
