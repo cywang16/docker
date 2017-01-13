@@ -6,4 +6,5 @@ services:
     ports:
       - "880:8080"
     volumes:
-      - /home/cywang/Shares:/mnt/shares
+      - .:/mnt/shares
+      # - /home/cywang/Shares:/mnt/shares
