@@ -1,0 +1,15 @@
+#
+# jboss exercise
+# try to find out how to use Perl with this image
+#
+
+version: '2'
+
+services:
+  web:
+    image: jboss/wildfly
+    volumes:
+      - .:/mnt/workplace
+    ports:
+      - "980:8080"
+      - "990:9990"
