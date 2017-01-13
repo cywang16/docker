@@ -3,6 +3,8 @@
 # docker-compose run web rails new . --force --database=postgresql --skip-bundle
 # sudo chown -R $USER:$USER .
 # docker-compose build (if Gemfile is modified)
+# // don't connect at this point
+# // delete the file tmp/pids/server.pid if it exists
 # docker-compose run web rails db:create
 
 version: '2'
@@ -14,13 +16,13 @@ services:
       POSTGRES_PASSWORD: 'keycloak'
       POSTGRES_ROOT_PASSWORD: 'test'
     ports:
-      - "5432"
+      - "5432:5432"
   web:
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     volumes:
       - .:/myapp
     ports:
-      - "3000:3000"
+      - "930:3000"
     depends_on:
       - db
