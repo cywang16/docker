@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: 'keycloak'
+      MYSQL_USER: 'keycloak'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_ROOT_PASSWORD: 'roottest'
+
+  keycloak:
+    image: jboss/keycloak-mysql
+    ports:
+      - "800:8080"
+    links:
+      - mysql
+    environment:
+      MYSQL_DATABASE: 'keycloak'
+      MYSQL_USERNAME: 'keycloak'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_PORT_3306_TCP_ADDR: mysql
+      MYSQL_PORT_3306_TCP_PORT: 3306
+      KEYCLOAK_USER: 'admin'
+      KEYCLOAK_PASSWORD: 'admin'
+    depends_on:
+      - mysql
