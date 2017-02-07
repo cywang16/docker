@@ -193,7 +193,14 @@ case $MyPROJECT in
     ## docker related commands ##
     #############################
     dinfo)
+	echo :::::::::::docker info:::::::::::
 	sudo docker info
+	echo :::::::::::docker version:::::::::::
+	sudo docker version
+	;;
+    dcinfo)
+	echo :::::::::::docker-compose version:::::::::::
+	sudo docker-compose --version
 	;;
     listim)
 	sudo docker images
