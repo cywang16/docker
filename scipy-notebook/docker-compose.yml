@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  sci-notebook:
+    image: jupyter/scipy-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/mnt/shares
