@@ -6,7 +6,8 @@ services:
     image: mysql
     volumes:
       # - db_data:/var/lib/mysql
-      - /home/cywang/GIT/docker/wordpress/db_data:/var/lib/mysql
+      # - /home/cywang/GIT/docker/wordpress/db_data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
     restart: always
     ports:
       - 3306:3306
@@ -20,6 +21,8 @@ services:
     depends_on:
       - db
     image: wordpress:latest
+    volumes:
+      - ./workplace:/workplace
     ports:
       - "980:80"
     restart: always

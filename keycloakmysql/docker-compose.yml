@@ -1,3 +1,7 @@
+# 1.
+# docker run --name mysql -e MYSQL_DATABASE=keycloak -e MYSQL_USER=keycloak -e MYSQL_PASSWORD=key0303 -e MYSQL_ROOT_PASSWORD=roottest -d mysql
+# 2.
+# docker run --name keycloak --link mysql:mysql -e MYSQL_DATABASE=keycloak -e MYSQL_USERNAME=keycloak -e MYSQL_PASSWORD=key0303 jboss/keycloak-mysql
 version: '2'
 
 services:
@@ -16,7 +20,7 @@ services:
     ports:
       - "800:8080"
     links:
-      - mysql
+      - mysql:mysql
     environment:
       MYSQL_DATABASE: 'keycloak'
       MYSQL_USERNAME: 'keycloak'
