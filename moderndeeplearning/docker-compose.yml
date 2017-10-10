@@ -1,0 +1,19 @@
+#
+# workplace for https://hub.docker.com/r/waleedka/modern-deep-learning/
+#
+# docker-compose is based on this command line:
+#     docker run -it -p 8888:8888 -p 6006:6006 -v ~/:/host waleedka/modern-deep-learning
+#
+
+version: '2'
+
+services:
+  web:
+    # build: .
+    image: waleedka/modern-deep-learning
+    command: bash /host/begin_jupyter
+    volumes:
+      - .:/host
+    ports:
+      - "8888:8888"
+      - "6006:6006"
