@@ -20,8 +20,9 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
     # command: FLASK_APP=/code/hello.py flask run
+    command: python /code/hello.py
     volumes:
       - .:/code
     ports:
