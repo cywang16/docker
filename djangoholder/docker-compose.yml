@@ -23,7 +23,10 @@ services:
     # command: python manage.py runserver 0.0.0.0:8000
     # command: FLASK_APP=/code/hello.py flask run
     command: python /code/hello.py
+    environment:
+      - DISPLAY=${DISPLAY}
     volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
       - .:/code
     ports:
       - "900:8000"

@@ -12,5 +12,3 @@ RUN mkdir /setup
 WORKDIR /setup
 ADD requirements.txt /setup/
 RUN pip install -r requirements.txt
-# ADD . /code/
-
