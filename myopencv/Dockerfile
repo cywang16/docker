@@ -48,14 +48,16 @@ RUN wget https://github.com/opencv/opencv/archive/3.3.0.zip \
   -DPYTHON_EXECUTABLE=$(which python3.6) \
   -DPYTHON_INCLUDE_DIR=$(python3.6 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
   -DPYTHON_PACKAGES_PATH=$(python3.6 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. \
-&& make install \
-&& cd /setup \
-&& rm 3.3.0.zip \
-&& rm -r opencv-3.3.0
+&& make \
+&& make install
 
-ADD requirements.txt /setup/
-RUN pip install --no-cache-dir -r requirements.txt
-EXPOSE 6006
+# && cd /setup \
+# && rm 3.3.0.zip \
+# && rm -r opencv-3.3.0
+
+# ADD requirements.txt /setup/
+# RUN pip install --no-cache-dir -r requirements.txt
+# EXPOSE 6006
 
 RUN useradd -m -U -s /bin/bash opencv
 USER opencv
