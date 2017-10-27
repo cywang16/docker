@@ -1,0 +1,16 @@
+#
+#
+
+version: '2'
+
+services:
+  opencv:
+    build: .
+    command: sh /code/idle.sh
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - .:/code
+    ports:
+      - "6006:6006"

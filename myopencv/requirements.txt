@@ -1,0 +1,11 @@
+beautifulsoup4
+lxml
+pygame
+numpy
+scipy
+sklearn
+scikit-image
+pandas
+matplotlib
+requests
+tensorflow
