@@ -5,8 +5,8 @@ version: '2'
 
 services:
   opencv:
-    # build: .
-    image: jjanzic/docker-python3-opencv
+    build: .
+    # image: jjanzic/docker-python3-opencv
     command: sh /code/idle.sh
     environment:
       - DISPLAY=${DISPLAY}
