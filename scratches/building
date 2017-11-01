@@ -77,6 +77,10 @@ case ${cmd,,} in
 	echo docker-compose build
 	sudo docker-compose build
 	;;
+    logsco)
+        echo docker logs $2
+        sudo docker logs $2
+        ;;
     dinfo)
 	sudo docker info
 	;;
