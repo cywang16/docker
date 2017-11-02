@@ -87,6 +87,10 @@ case ${cmd,,} in
     dversion)
 	sudo docker version
 	;;
+    rootown)
+        echo sudo chown -R $USER:$USER $2
+        sudo chown -R $USER:$USER $2
+	;;
     *)
 	echo unknown command ${cmd,,}
 	;;

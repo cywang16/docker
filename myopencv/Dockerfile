@@ -8,7 +8,7 @@ RUN apt-get update && \
         apt-get install -y \
         build-essential \
         cmake \
-        git \
+        libgtk2.0-dev \
         wget \
         unzip \
         yasm \
@@ -53,8 +53,8 @@ RUN wget https://github.com/opencv/opencv/archive/3.3.1.zip \
 && rm 3.3.1.zip \
 && rm -r opencv-3.3.1
 
-ADD requirements.txt /setup/
-RUN pip install --no-cache-dir -r /setup/requirements.txt
+ADD requirements.txt /
+RUN pip install --no-cache-dir -r /requirements.txt && rm /requirements.txt
 # EXPOSE 6006
 
 RUN useradd -m -U -s /bin/bash opencv
