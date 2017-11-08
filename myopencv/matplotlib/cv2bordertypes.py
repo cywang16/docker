@@ -1,10 +1,12 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+import os
 
 BLUE = [255,0,0]
-
-img1 = cv2.imread('opencv-logo.png')
+logopng = os.path.dirname(os.path.realpath(__file__)) + '/opencv-logo.png'
+# img1 = cv2.imread('opencv-logo.png')
+img1 = cv2.imread(logopng)
 
 replicate = cv2.copyMakeBorder(img1,10,10,10,10,cv2.BORDER_REPLICATE)
 reflect = cv2.copyMakeBorder(img1,10,10,10,10,cv2.BORDER_REFLECT)
