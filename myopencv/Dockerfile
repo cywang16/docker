@@ -21,7 +21,8 @@ RUN apt-get update && \
         libtiff-dev \
         libjasper-dev \
         libavformat-dev \
-        libpq-dev
+        libpq-dev \
+        libcanberra-gtk-module
 
 RUN pip install numpy
 
