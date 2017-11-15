@@ -10,6 +10,10 @@ case ${cmd,,} in
 	echo sudo docker images
 	sudo docker images
 	;;
+    listallim)
+	echo sudo docker images ls -a
+	sudo docker images ls -a
+	;;
     rmim)
 	# echo sudo docker rmi $2
 	# sudo docker rmi $2
@@ -21,6 +25,13 @@ case ${cmd,,} in
 	    sudo docker rmi $1
 	    shift
 	done
+	;;
+    rmallim)
+	# echo sudo docker rmi $2
+	# sudo docker rmi $2
+	echo delete all docker images
+	echo docker rmi -f $(docker image ls -a -q)
+	sudo docker rmi -f $(sudo docker image ls -a -q)
 	;;
     listco)
 	echo sudo docker ps -a
