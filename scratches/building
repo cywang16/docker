@@ -11,8 +11,8 @@ case ${cmd,,} in
 	sudo docker images
 	;;
     listallim)
-	echo sudo docker images ls -a
-	sudo docker images ls -a
+	echo sudo docker image ls -a
+	sudo docker image ls -a
 	;;
     rmim)
 	# echo sudo docker rmi $2
