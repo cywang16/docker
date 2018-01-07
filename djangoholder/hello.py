@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = '/tmp'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
+dfx = pd.read_excel(open('/code/CourseFactorTable.xlsx','rb'), sheetname='Sheet1')
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -39,6 +40,18 @@ def fix_csv(filename):
                               'Days',
                               'Adjudicator',
                               'Status']
+    classdataFixed['Factor'] = 0
+    classdataFixed['Time'] = 0
+    for i, row in classdataFixed.iterrows():
+        r = dfx[(dfx['CourseCode'] == row['Class Code']) |
+                (dfx['CourseCode'] == row['Class Code'][:-2])]
+        if len(r.index) == 1:
+            factor = r.iloc[0]['ScheduleFactor']
+            classdataFixed.set_value(i, 'Factor', factor)
+            classdataFixed.set_value(i, 'Time', factor * (row['Enrolled'] + row['Pending']))
+    cols = classdataFixed.columns.tolist()
+    cols = cols[:2] + cols[-2:] + cols[2:-2]
+    classdataFixed = classdataFixed[cols]
     filenamefixed = '{}_fixed.csv'.format(os.path.splitext(filename)[0])
     classdataFixed.to_csv(os.path.join(app.config['UPLOAD_FOLDER'], filenamefixed), index = False)
     return filenamefixed
