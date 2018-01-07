@@ -3,10 +3,13 @@ import os
 import pandas as pd
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+import pytz
+from datetime import datetime
 
 UPLOAD_FOLDER = '/tmp'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
 dfx = pd.read_excel(open('/code/CourseFactorTable.xlsx','rb'), sheetname='Sheet1')
+g_tz_pst = pytz.timezone('America/Los_Angeles')
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -14,6 +17,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def compact_datetime_String():
+    return datetime.now(g_tz_pst).strftime("%Y%m%d-%H%M-%Z")
 
 def fix_csv(filename):
     classdata = pd.read_csv(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -52,7 +58,7 @@ def fix_csv(filename):
     cols = classdataFixed.columns.tolist()
     cols = cols[:2] + cols[-2:] + cols[2:-2]
     classdataFixed = classdataFixed[cols]
-    filenamefixed = '{}_fixed.csv'.format(os.path.splitext(filename)[0])
+    filenamefixed = 'CourseSummary-{}.csv'.format(compact_datetime_String())
     classdataFixed.to_csv(os.path.join(app.config['UPLOAD_FOLDER'], filenamefixed), index = False)
     return filenamefixed
 
