@@ -72,6 +72,10 @@ case ${cmd,,} in
 	echo docker-compose up -d
 	sudo docker-compose up -d
 	;;
+    dcupa)
+	echo docker-compose up
+	sudo docker-compose up
+	;;
     dcrund)
 	echo docker-compose run -d $2
 	sudo docker-compose run -d $2
