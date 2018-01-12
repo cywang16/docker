@@ -76,7 +76,7 @@ case ${cmd,,} in
 	;;
     bashco)
 	echo start a bash in a container
-	sudo docker exec -it $2 bash
+	sudo docker exec -it $(getContainerId $2) bash
 	;;
     bashna)
 	echo start a bash in a container
