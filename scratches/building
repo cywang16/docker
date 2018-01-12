@@ -5,6 +5,16 @@ cmd=$1
 echo command to execute: $cmd
 echo ${cmd,} ${cmd,,}
 
+getContainerId()
+{
+    echo $(sudo docker ps -a | grep "$1" | awk '{print $1}')
+}
+
+getImageId()
+{
+    echo $(sudo docker images | grep "$1" | awk '{print $3}')
+}
+
 case ${cmd,,} in
     listim)
 	echo sudo docker images
@@ -17,12 +27,12 @@ case ${cmd,,} in
     rmim)
 	# echo sudo docker rmi $2
 	# sudo docker rmi $2
-	echo delete a docker image
+	echo delete a list of docker images
 	shift
 	while (( "$#" ))
 	do
 	    echo docker rmi $1
-	    sudo docker rmi $1
+	    sudo docker rmi $(getImageId $1)
 	    shift
 	done
 	;;
@@ -30,7 +40,7 @@ case ${cmd,,} in
 	# echo sudo docker rmi $2
 	# sudo docker rmi $2
 	echo delete all docker images
-	echo docker rmi -f $(docker image ls -a -q)
+	echo docker rmi -f docker image ls -a -q
 	sudo docker rmi -f $(sudo docker image ls -a -q)
 	;;
     listco)
@@ -97,8 +107,11 @@ case ${cmd,,} in
 	sudo docker-compose build
 	;;
     logsco)
-        echo docker logs $2
-        sudo docker logs $2
+        containerId=$(getContainerId $2)
+        echo "$2 has container Id as $containerId"
+        echo docker logs $containerId
+        # sudo docker logs $2
+        sudo docker logs $containerId
         ;;
     dinfo)
 	sudo docker info
@@ -110,6 +123,9 @@ case ${cmd,,} in
         echo sudo chown -R $USER:$USER $2
         sudo chown -R $USER:$USER $2
 	;;
+    testimageid)
+        echo $(getImageId $2)
+        ;;
     *)
 	echo unknown command ${cmd,,}
 	;;
