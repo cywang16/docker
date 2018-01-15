@@ -1,0 +1,121 @@
+#!/bin/bash
+echo Hello World
+echo command line count: $#
+cmd=$1
+# echo command to execute: $cmd
+# echo ${cmd,} ${cmd,,}
+cmd=$(tr '[A-Z]' '[a-z]' <<< "$cmd")
+
+getContainerId()
+{
+    echo $(docker ps -a | grep "$1" | awk '{print $1}')
+}
+
+getImageId()
+{
+    echo $(docker images | grep "$1" | awk '{print $3}')
+}
+
+case $cmd in
+    listim)
+	echo docker images
+	docker images
+	;;
+    listallim)
+	echo docker image ls -a
+	docker image ls -a
+	;;
+    rmim)
+	# echo docker rmi $2
+	# docker rmi $2
+	echo delete a docker image
+	shift
+	while (( "$#" ))
+	do
+	    echo docker rmi $1
+	    docker rmi $(getImageId $1)
+	    shift
+	done
+	;;
+    rmallim)
+	# echo docker rmi $2
+	# docker rmi $2
+	echo delete all docker images
+	echo docker rmi -f $(docker image ls -a -q)
+	docker rmi -f $(docker image ls -a -q)
+	;;
+    listco)
+	echo docker ps -a
+	docker ps -a
+	;;
+    stopco)
+	echo docker stop $2
+	docker stop $2
+	;;
+    rmco)
+	# ~/building stopco $2
+	# echo docker rm $2
+	# docker rm $2
+	echo stop and delete a docker container
+	shift
+	while (( "$#" ))
+	do
+	    echo docker stop $1
+	    docker stop $1
+	    echo docker rm $1
+	    docker rm $1
+	    shift
+	done
+	;;
+    startco)
+	echo docker start $2
+	docker start $2
+	;;
+    restartco)
+	~/building stopco $2
+	~/building startco $2
+	;;
+    bashco)
+	echo start a bash in a container
+	docker exec -it $(getContainerId $2) bash
+	;;
+    dcup)
+	echo docker-compose up -d
+	docker-compose up -d
+	;;
+    dcrund)
+	echo docker-compose run -d $2
+	docker-compose run -d $2
+	;;
+    dcstop)
+	echo docker-compose stop
+	docker-compose stop
+	;;
+    dcdown)
+	echo docker-compose down
+	docker-compose down
+	;;
+    dcbuild)
+	echo docker-compose build
+	docker-compose build
+	;;
+    logsco)
+        containerId=$(getContainerId $2)
+        echo "$2 has container Id as $containerId"
+        echo docker logs $containerId
+        docker logs $containerId
+        ;;
+    dinfo)
+	docker info
+	;;
+    dversion)
+	docker version
+	;;
+    rootown)
+        echo chown -R $USER:$USER $2
+        chown -R $USER:$USER $2
+	;;
+    *)
+	echo unknown command $cmd
+	;;
+esac
