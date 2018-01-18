@@ -13,10 +13,14 @@ def compact_datetime_String():
 
 def fix_csv(filename):
     classdata = pd.read_csv(filename)
+    '''
     del classdata['textBox35']
     del classdata['textBox5']
     del classdata['textBox37']
     del classdata['textBox38']
+    '''
+    cols = [0, 1, -3, -2]
+    classdata.drop(classdata.columns[cols], axis=1, inplace=True)
     cols = classdata.columns.tolist()
     cols = cols[-3:-2] + cols[:-3] + cols[-2:]
     cols = cols[0:7] + cols[-2:-1] + cols[7:-2] + cols[-1:]
@@ -25,8 +29,8 @@ def fix_csv(filename):
                               'Room',
                               'Min',
                               'Max',
-                              'Pending',
                               'Enrolled',
+                              'Pending',
                               'Waitlisted',
                               'Open',
                               'Start Date',
@@ -36,6 +40,7 @@ def fix_csv(filename):
                               'Days',
                               'Adjudicator',
                               'Status']
+    classdataFixed.is_copy = False
     classdataFixed['Factor'] = 0
     classdataFixed['Time'] = 0
     for i, row in classdataFixed.iterrows():
@@ -51,7 +56,6 @@ def fix_csv(filename):
     filenamefixed = 'CourseSummary-{}.csv'.format(compact_datetime_String())
     classdataFixed.to_csv(filenamefixed, index = False)
     return filenamefixed
-
 
 if __name__ == "__main__":
     fix_csv(sys.argv[1])
