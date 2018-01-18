@@ -78,6 +78,10 @@ case ${cmd,,} in
 	echo start a bash in a container
 	sudo docker exec -it $(getContainerId $2) bash
 	;;
+    listnet)
+	echo sudo docker network ls
+	sudo docker network ls
+	;;
     dcup)
 	echo docker-compose up -d
 	sudo docker-compose up -d

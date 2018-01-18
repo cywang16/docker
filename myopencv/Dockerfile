@@ -27,10 +27,10 @@ RUN apt-get update && \
 RUN pip install numpy
 
 WORKDIR /
-RUN wget https://github.com/opencv/opencv/archive/3.3.1.zip \
-&& unzip 3.3.1.zip \
-&& mkdir /opencv-3.3.1/cmake_binary \
-&& cd /opencv-3.3.1/cmake_binary \
+RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip \
+&& unzip 3.4.0.zip \
+&& mkdir /opencv-3.4.0/cmake_binary \
+&& cd /opencv-3.4.0/cmake_binary \
 && cmake -DBUILD_TIFF=ON \
   -DBUILD_opencv_java=OFF \
   -DWITH_CUDA=OFF \
@@ -51,8 +51,8 @@ RUN wget https://github.com/opencv/opencv/archive/3.3.1.zip \
 && make \
 && make install \
 && cd / \
-&& rm 3.3.1.zip \
-&& rm -r opencv-3.3.1
+&& rm 3.4.0.zip \
+&& rm -r opencv-3.4.0
 
 ADD requirements.txt /
 RUN pip install --no-cache-dir -r /requirements.txt && rm /requirements.txt
