@@ -85,8 +85,9 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
+        'NAME': 'slack',
+        'USER': 'snowflake',
+        'PASSWORD': '1Stepcloser',
         'HOST': 'db',
         'PORT': 5432,
     }
