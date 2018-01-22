@@ -5,7 +5,7 @@ import pandas as pd
 import pytz
 from datetime import datetime
 
-dfx = pd.read_excel(open('CourseFactorTable.xlsx','rb'), sheetname='Sheet1')
+dfx = pd.read_excel(open('CourseFactorTable.xlsx','rb'), sheet_name='Sheet1')
 g_tz_pst = pytz.timezone('America/Los_Angeles')
 
 def compact_datetime_String():
