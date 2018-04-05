@@ -5,6 +5,7 @@ services:
     image: jupyter/tensorflow-notebook
     ports:
       - "8888:8888"
+      - "6006:6006"
     volumes:
       - ./notebooks:/home/jovyan/notebooks
       - ./matplotlib:/home/jovyan/matplotlib
