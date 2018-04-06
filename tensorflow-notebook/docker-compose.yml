@@ -9,3 +9,4 @@ services:
     volumes:
       - ./notebooks:/home/jovyan/notebooks
       - ./matplotlib:/home/jovyan/matplotlib
+      - ./scripts:/home/jovyan/scripts

@@ -1,0 +1,26 @@
+#!/bin/bash
+echo Hello World
+echo command line count: $#
+cmd=$1
+echo command to execute: $cmd
+echo ${cmd,} ${cmd,,}
+
+getContainerId()
+{
+    echo $(sudo docker ps -a | grep "$1" | awk '{print $1}')
+}
+
+getImageId()
+{
+    echo $(sudo docker images | grep "$1" | awk '{print $3}')
+}
+
+case ${cmd,,} in
+    tfupgrade)
+	echo pip install -q --upgrade tensorflow
+	pip install -q --upgrade tensorflow
+	;;
+    *)
+	echo unknown command ${cmd,,}
+	;;
+esac
