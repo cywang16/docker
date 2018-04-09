@@ -17,6 +17,8 @@ getImageId()
 
 case ${cmd,,} in
     tfupgrade)
+	echo pip install -q --upgrade matplotlib
+	pip install -q --upgrade matplotlib
 	echo pip install -q --upgrade tensorflow
 	pip install -q --upgrade tensorflow
 	;;
