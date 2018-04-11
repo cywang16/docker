@@ -1,0 +1,16 @@
+#
+# JDK workplace
+#
+
+version: '3'
+
+services:
+  web:
+    # image: openjdk
+    build: .
+    command: sh /workplace/idle.sh
+    volumes:
+      - .:/workplace
+    ports:
+      - "980:8080"
+      - "990:9990"
