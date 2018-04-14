@@ -2,6 +2,7 @@
 echo Hello World
 echo command line count: $#
 cmd=$1
+scriptpath=`realpath $0`
 echo command to execute: $cmd
 echo ${cmd,} ${cmd,,}
 
@@ -21,12 +22,19 @@ case ${cmd,,} in
         python -c 'import numpy as np; print("numpy version: {}".format(np.__version__))'
         python -c 'import tensorflow as tf; print("tensorflow version: {}".format(tf.VERSION))'
         ;;
+    tfup)
+        $scriptpath tfupdate
+        ;;
     tfupdate)
 	echo pip install -q --upgrade matplotlib
 	pip install -q --upgrade matplotlib
 	echo pip install -q --upgrade tensorflow
 	pip install -q --upgrade tensorflow
 	;;
+    scratches)
+        echo $scriptpath
+        echo `realpath $0`
+        ;;
     *)
 	echo unknown command ${cmd,,}
 	;;
