@@ -18,6 +18,10 @@ getImageId()
 
 case ${cmd,,} in
     tfver)
+        $scriptpath tfversion
+        ;;
+    tfversion)
+        python -c 'import sys; print("Python version:\n{}".format(sys.version))'
         python -c 'import matplotlib; print("matplotlib version: {}".format(matplotlib.__version__))'
         python -c 'import numpy as np; print("numpy version: {}".format(np.__version__))'
         python -c 'import tensorflow as tf; print("tensorflow version: {}".format(tf.VERSION))'
@@ -30,6 +34,7 @@ case ${cmd,,} in
 	pip install -q --upgrade matplotlib
 	echo pip install -q --upgrade tensorflow
 	pip install -q --upgrade tensorflow
+        $scriptpath tfversion
 	;;
     scratches)
         echo $scriptpath
