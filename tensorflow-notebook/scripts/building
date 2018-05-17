@@ -30,6 +30,7 @@ case ${cmd,,} in
         $scriptpath tfupdate
         ;;
     tfupdate)
+        $scriptpath tfver
 	echo pip install -q --upgrade matplotlib
 	pip install -q --upgrade matplotlib
 	echo pip install -q --upgrade tensorflow
