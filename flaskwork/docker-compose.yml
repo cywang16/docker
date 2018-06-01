@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  web:
+    build: .
+    command: python /code/hello.py
+    volumes:
+      - .:/code
+    ports:
+      - "900:8000"
+      - "1500:5000"
