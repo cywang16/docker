@@ -24,6 +24,10 @@ case ${cmd,,} in
 	echo sudo docker image ls -a
 	sudo docker image ls -a
 	;;
+    dcstart)
+        echo sudo systemctl start docker
+        sudo systemctl start docker
+        ;;
     rmim)
 	# echo sudo docker rmi $2
 	# sudo docker rmi $2
