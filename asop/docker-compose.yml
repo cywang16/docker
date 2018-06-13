@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  aosp:
+    image: kylemanna/aosp:latest
+    command: /bin/bash
+    volumes:
+      - /tmp/ccache:/ccache
+      - ~/sakurai:/aosp
