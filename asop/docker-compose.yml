@@ -2,8 +2,9 @@ version: '2'
 
 services:
   aosp:
-    image: kylemanna/aosp:latest
-    command: /bin/bash
+    # image: kylemanna/aosp:latest
+    build: .
+    command: /bin/bash -c "while true; do foo; sleep 20; done"
     volumes:
       - /tmp/ccache:/ccache
-      - ~/sakurai:/aosp
+      - ./project:/application
