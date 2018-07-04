@@ -1,0 +1,22 @@
+# centos network config
+# file location is /etc/sysconfig/network-scripts/ifcfg-eth0
+TYPE="Ethernet"
+PROXY_METHOD="none"
+BROWSER_ONLY="no"
+BOOTPROTO="static"
+DEFROUTE="yes"
+IPV4_FAILURE_FATAL="no"
+IPV6INIT="yes"
+IPV6_AUTOCONF="yes"
+IPV6_DEFROUTE="yes"
+IPV6_FAILURE_FATAL="no"
+IPV6_ADDR_GEN_MODE="stable-privacy"
+NAME="eth0"
+UUID="3ad0ade7-b2b7-4cff-a23a-8ea1a20cbfbd"
+DEVICE="eth0"
+ONBOOT="yes"
+IPADDR=10.0.0.120
+NETMASK=255.255.255.0
+GATEWAY=10.0.0.1
+DNS1=75.75.75.75
+DNS2=75.75.76.76
