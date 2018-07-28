@@ -6,6 +6,7 @@ services:
     ports:
       - "8888:8888"
       - "6006:6006"
+      - "8880:1880"
     volumes:
       - ./notebooks:/home/jovyan/notebooks
       - ./matplotlib:/home/jovyan/matplotlib
