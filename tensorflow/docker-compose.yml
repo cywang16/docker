@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  sci-notebook:
+    image: tensorflow/tensorflow
+    ports:
+      - "8888:8888"
+      - "6006:6006"
+      - "8880:1880"
+    volumes:
+      - ./:/notebooks
