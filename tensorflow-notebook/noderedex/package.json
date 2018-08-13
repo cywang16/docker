@@ -1,0 +1,24 @@
+{
+   "name": "nodered-workplace",
+   "version": "1.0.0",
+   "description": "package for noderedex image",
+   "main": "index.js",
+   "scripts": {
+      "start": "node-red -s settings.js",
+      "test": "."
+   },
+   "dependencies": {
+      "node-red": "^0.18.7",
+      "node-red-admin": "^0.1.3",
+      "node-red-contrib-hello-world": "",
+      "node-red-contrib-httpauth": ""
+   },
+   "keywords": [
+      "nodered"
+   ],
+   "devDependencies": {
+      "node-red": ""
+   },
+   "author": "Chun-Yen Wang",
+   "license": "ISC"
+}

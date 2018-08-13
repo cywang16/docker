@@ -11,3 +11,4 @@ services:
       - ./notebooks:/home/jovyan/notebooks
       - ./matplotlib:/home/jovyan/matplotlib
       - ./scripts:/home/jovyan/scripts
+      - ./noderedex:/home/jovyan/noderedex

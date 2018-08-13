@@ -1,0 +1,13 @@
+# npm
+
+# folders to skip
+node_modules
+lib
+
+# files to skip
+.config.json
+.config.json.backup
+.flows*.json.backup
+.sessions.json
+flows*_cred.json
+package-lock.json

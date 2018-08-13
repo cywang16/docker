@@ -1,0 +1,10 @@
+body {
+    font-family: sans-serif;
+    background-color: lightblue;
+}
+div, p, code, pre { margin:0.3em; padding: 0.3em;}
+pre .string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
