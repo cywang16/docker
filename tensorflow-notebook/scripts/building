@@ -25,7 +25,7 @@ case ${cmd,,} in
         python -c 'import matplotlib; print("matplotlib version: {}".format(matplotlib.__version__))'
         python -c 'import numpy as np; print("numpy version: {}".format(np.__version__))'
         python -c 'import tensorflow as tf; print("tensorflow version: {}".format(tf.VERSION))'
-	npm --version
+	echo 'npm version:' $(npm --version)
         ;;
     tfup)
         $scriptpath tfupdate
@@ -38,6 +38,7 @@ case ${cmd,,} in
 	pip install -q --upgrade tensorflow
 	echo npm install -g npm@latest
 	npm install -g npm@latest
+	npm i -g npm
         $scriptpath tfversion
 	;;
     scratches)
