@@ -5,3 +5,5 @@
 Untitled.ipynb
 events.out.tfevents.*
 jsonfile.txt
+jsonpretty.json
+jsononeline.json
