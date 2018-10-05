@@ -109,6 +109,7 @@ module.exports = {
     // -----------------
     // To password protect the Node-RED editor and admin API, the following
     // property can be used. See http://nodered.org/docs/security.html for details.
+    /*
     adminAuth: {
         type: "credentials",
         users: [{
@@ -117,6 +118,7 @@ module.exports = {
             permissions: "*"
         }]
     },
+    */
 
     // To password protect the node-defined HTTP endpoints (httpNodeRoot), or
     // the static content (httpStatic), the following properties can be used.
@@ -131,10 +133,12 @@ module.exports = {
     // See the comment at the top of this file on how to load the `fs` module used by
     // this setting.
     //
+    /*
     https: {
         key: fs.readFileSync('./openssl/privatekey.pem'),
         cert: fs.readFileSync('./openssl/certificate.pem')
     },
+    */
 
     // The following property can be used to cause insecure HTTP connections to
     // be redirected to HTTPS.
