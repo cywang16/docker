@@ -7,3 +7,4 @@ events.out.tfevents.*
 jsonfile.txt
 jsonpretty.json
 jsononeline.json
+url.txt
