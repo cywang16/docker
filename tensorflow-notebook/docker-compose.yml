@@ -1,8 +1,8 @@
-version: '2'
+version: '3'
 
 services:
   sci-notebook:
-    image: jupyter/tensorflow-notebook
+    image: jupyter/tensorflow-notebook:${TAG:-latest}
     ports:
       - "8888:8888"
       - "6006:6006"
