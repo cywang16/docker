@@ -118,6 +118,10 @@ case ${cmd,,} in
 	echo docker-compose build
 	sudo docker-compose build
 	;;
+    dcver)
+	echo docker-compose version
+	docker-compose version
+	;;
     logsco)
         containerId=$(getContainerId $2)
         echo "$2 has container Id as $containerId"
