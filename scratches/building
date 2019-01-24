@@ -129,6 +129,14 @@ case ${cmd,,} in
         # sudo docker logs $2
         sudo docker logs $containerId
         ;;
+    logswd)
+        containerId=$(getContainerId $2)
+        echo "$2 has container Id as $containerId"
+        echo "$3 is the word to look up"
+        echo docker logs $containerId
+        # sudo docker logs $2
+        sudo docker logs $containerId 2>&1 | grep $3
+        ;;
     dinfo)
 	sudo docker info
 	;;
