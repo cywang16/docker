@@ -1,0 +1,12 @@
+#
+# JDK workplace
+#
+
+version: '3'
+
+services:
+  latex:
+    image: aergus/latex
+    command: sh /home/latex/workplace/idle.sh
+    volumes:
+      - ./workplace:/home/latex/workplace
