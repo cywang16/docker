@@ -1,1 +1,9 @@
 Flask
+SQLAlchemy
+httplib2
+requests
+oauth2client
+redis
+passlib
+itsdangerous
+flask-httpauth
