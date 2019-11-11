@@ -1,0 +1,3 @@
+while read li; do
+    if [[ $li =~ ^(\([0-9]{3}\)\ |[0-9]{3}\-)[0-9]{3}\-[0-9]{4}$ ]] ; then echo $li; fi
+done <phone.txt
