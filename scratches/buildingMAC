@@ -17,6 +17,9 @@ getImageId()
 }
 
 case $cmd in
+    isim)
+	open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app
+	;;
     listim)
 	echo docker images
 	docker images
