@@ -11,3 +11,6 @@ url.txt
 url.escape.txt
 xmlfile.txt
 xmlpretty.txt
+/notebooks/stations.txt
+/notebooks/ghcnd-readme.txt
+/notebooks/*dly
