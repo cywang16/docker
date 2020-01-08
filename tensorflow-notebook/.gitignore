@@ -14,3 +14,5 @@ xmlpretty.txt
 /notebooks/stations.txt
 /notebooks/ghcnd-readme.txt
 /notebooks/*dly
+/notebooks/names.zip
+/notebooks/names/*
