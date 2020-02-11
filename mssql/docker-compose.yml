@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "10433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=m(!)sq1INdocker

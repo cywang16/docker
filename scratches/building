@@ -18,6 +18,12 @@ getImageId()
 case ${cmd,,} in
     aptu)
 	counter=1
+	sudo apt-get update
+	while [[ $counter -le 25 ]] ; do
+	    sudo apt-get update && break
+	    sleep 5
+	    ((counter++))
+	done
 	while [[ $counter -le 25 ]] ; do
 	    sudo apt-get -y dist-upgrade && break
 	    sleep 5
