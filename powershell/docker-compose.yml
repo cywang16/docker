@@ -1,0 +1,15 @@
+#
+#
+#
+
+version: '3'
+
+services:
+  web:
+    image: mcr.microsoft.com/powershell
+    command: sh /code/idle.sh
+    volumes:
+      - .:/code
+    ports:
+      - "900:8000"
+      - "1500:5000"
