@@ -8,3 +8,8 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=m(!)sq1INdocker
+
+  dotnet:
+    image: mcr.microsoft.com/dotnet/core/runtime
+    depends_on:
+      - mssql

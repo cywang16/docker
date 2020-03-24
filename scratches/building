@@ -61,6 +61,16 @@ case ${cmd,,} in
 	echo docker rmi -f docker image ls -a -q
 	sudo docker rmi -f $(sudo docker image ls -a -q)
 	;;
+    dimb)
+	shift
+	echo docker image build $*
+	sudo docker image build $*
+	;;
+    dkctrun)
+	shift
+	echo docker container run $*
+	sudo docker container run $*
+	;;
     listco)
 	echo sudo docker ps -a
 	sudo docker ps -a
