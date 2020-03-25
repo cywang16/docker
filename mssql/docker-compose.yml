@@ -3,6 +3,8 @@ version: '3'
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server
+    volumes:
+      - ./:/data
     ports:
       - "10433:1433"
     environment:
@@ -11,5 +13,10 @@ services:
 
   dotnet:
     image: mcr.microsoft.com/dotnet/core/runtime
+    command: sh /workplace/idle.sh
+    volumes:
+      - ./:/workplace
+    ports:
+      - 980:80
     depends_on:
       - mssql
