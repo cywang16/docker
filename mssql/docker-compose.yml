@@ -12,7 +12,7 @@ services:
       - SA_PASSWORD=m(!)sq1INdocker
 
   dotnet:
-    image: mcr.microsoft.com/dotnet/core/runtime
+    image: mcr.microsoft.com/dotnet/core/sdk:2.1
     command: sh /workplace/idle.sh
     volumes:
       - ./:/workplace
