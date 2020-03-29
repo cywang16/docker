@@ -12,11 +12,12 @@ services:
       - SA_PASSWORD=m(!)sq1INdocker
 
   dotnet:
-    image: mcr.microsoft.com/dotnet/core/sdk:2.1
+    image: mcr.microsoft.com/dotnet/core/sdk:3.1
     command: sh /workplace/idle.sh
     volumes:
       - ./:/workplace
     ports:
-      - 980:80
+      - 980:8080
+      - 981:8081
     depends_on:
       - mssql
