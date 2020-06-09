@@ -1,0 +1,180 @@
+#!/bin/bash
+echo Hello World
+echo command line count: $#
+cmd=$1
+echo command to execute: $cmd
+echo ${cmd,} ${cmd,,}
+
+getContainerId()
+{
+    echo $(docker ps -a | grep "$1" | awk '{print $1}')
+}
+
+getImageId()
+{
+    echo $(docker images | grep "$1" | awk '{print $3}')
+}
+
+case ${cmd,,} in
+    aptu)
+	counter=1
+	while [[ $counter -le 25 ]] ; do
+	    sudo apt-get update && break
+	    sleep 5
+	    ((counter++))
+	done
+	counter=1
+	while [[ $counter -le 25 ]] ; do
+	    sudo apt-get -y dist-upgrade && break
+	    sleep 5
+	    ((counter++))
+	done
+	;;
+    listim)
+	echo docker images
+	docker images
+	;;
+    listallim)
+	echo sudo docker image ls -a
+	sudo docker image ls -a
+	;;
+    dcstart)
+        echo sudo systemctl start docker
+        sudo systemctl start docker
+        ;;
+    rmim)
+	# echo sudo docker rmi $2
+	# sudo docker rmi $2
+	echo delete a list of docker images
+	shift
+	while (( "$#" ))
+	do
+	    echo docker rmi $1
+	    sudo docker rmi $(getImageId $1)
+	    shift
+	done
+	;;
+    rmallim)
+	# echo sudo docker rmi $2
+	# sudo docker rmi $2
+	echo delete all docker images
+	echo docker rmi -f docker image ls -a -q
+	sudo docker rmi -f $(sudo docker image ls -a -q)
+	;;
+    dimb)
+	shift
+	echo docker image build $*
+	sudo docker image build $*
+	;;
+    dkctrun)
+	shift
+	echo docker container run $*
+	sudo docker container run $*
+	;;
+    listco)
+	echo docker ps -a
+	docker ps -a
+	;;
+    stopco)
+	echo sudo docker stop $2
+	sudo docker stop $2
+	;;
+    rmco)
+	# ~/building stopco $2
+	# echo sudo docker rm $2
+	# sudo docker rm $2
+	echo stop and delete a docker container
+	shift
+	while (( "$#" ))
+	do
+	    echo docker stop $1
+	    sudo docker stop $1
+	    echo docker rm $1
+	    sudo docker rm $1
+	    shift
+	done
+	;;
+    startco)
+	echo sudo docker start $2
+	sudo docker start $2
+	;;
+    restartco)
+	~/building stopco $2
+	~/building startco $2
+	;;
+    bashco)
+	echo start a bash in a container
+	winpty docker exec -it $(getContainerId $2) bash
+	;;
+    listnet)
+	echo sudo docker network ls
+	sudo docker network ls
+	;;
+    prunenet)
+        echo sudo docker network prune -f
+        sudo docker network prune -f
+        ;;
+    dcup)
+	echo docker-compose up -d
+	docker-compose up -d
+	;;
+    dcupe)
+	echo docker-compose up -d
+	sudo -E docker-compose up -d
+	;;
+    dcupa)
+	echo docker-compose up
+	sudo docker-compose up
+	;;
+    dcrund)
+	echo docker-compose run -d $2
+	sudo docker-compose run -d $2
+	;;
+    dcstop)
+	echo docker-compose stop
+	docker-compose stop
+	;;
+    dcdown)
+	echo docker-compose down
+	docker-compose down
+	;;
+    dcbuild)
+	echo docker-compose build
+	sudo docker-compose build
+	;;
+    dcver)
+	echo docker-compose version
+	docker-compose version
+	;;
+    logsco)
+        containerId=$(getContainerId $2)
+        echo "$2 has container Id as $containerId"
+        echo docker logs $containerId
+        # sudo docker logs $2
+        docker logs $containerId
+        ;;
+    logswd)
+        containerId=$(getContainerId $2)
+        echo "$2 has container Id as $containerId"
+        echo "$3 is the word to look up"
+        echo docker logs $containerId
+        # sudo docker logs $2
+        sudo docker logs $containerId 2>&1 | grep $3
+        ;;
+    dinfo)
+	sudo docker info
+	;;
+    dversion)
+	sudo docker version
+	;;
+    rootown)
+        echo sudo chown -R $USER:$USER $2
+        sudo chown -R $USER:$USER $2
+	;;
+    testimageid)
+        echo $(getImageId $2)
+        ;;
+    *)
+	echo unknown command ${cmd,,}
+	;;
+esac
