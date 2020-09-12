@@ -118,6 +118,13 @@ case ${cmd,,} in
 	echo docker-compose up -d
 	sudo docker-compose up -d
 	;;
+    dcupgrade)
+        compose_version=$(node -pe 'JSON.parse(process.argv[1]).name' "$(curl https://api.github.com/repos/docker/compose/releases/latest)")
+        output='/usr/local/bin/docker-compose'
+        sudo curl -L https://github.com/docker/compose/releases/download/$compose_version/docker-compose-$(uname -s)-$(uname -m) -o $output
+        sudo chmod +x $output
+        echo $(docker-compose --version)
+        ;;
     dcupe)
 	echo docker-compose up -d
 	sudo -E docker-compose up -d
