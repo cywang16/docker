@@ -50,7 +50,7 @@ case ${cmd,,} in
 	while (( "$#" ))
 	do
 	    echo docker rmi $1
-	    sudo docker rmi $(getImageId $1)
+	    docker rmi $(getImageId $1)
 	    shift
 	done
 	;;
@@ -162,14 +162,14 @@ case ${cmd,,} in
         sudo docker logs $containerId 2>&1 | grep $3
         ;;
     dinfo)
-	sudo docker info
+	docker info
 	;;
     dversion)
-	sudo docker version
+	docker version
 	;;
     rootown)
-        echo sudo chown -R $USER:$USER $2
-        sudo chown -R $USER:$USER $2
+        echo chown -R $USER:$USER $2
+        chown -R $USER:$USER $1
 	;;
     testimageid)
         echo $(getImageId $2)
