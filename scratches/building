@@ -115,7 +115,7 @@ case ${cmd,,} in
         sudo docker network prune -f
         ;;
     dcup)
-	if [[ $# -gt 1]]
+	if [[ $# -gt 1 ]]
 	then
 	    echo docker-compose -f $2 up -d
 	    sudo docker-compose -f $2 up -d
