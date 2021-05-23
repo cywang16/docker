@@ -115,8 +115,14 @@ case ${cmd,,} in
         sudo docker network prune -f
         ;;
     dcup)
-	echo docker-compose up -d
-	sudo docker-compose up -d
+	if [[ $# -gt 1]]
+	then
+	    echo docker-compose -f $2 up -d
+	    sudo docker-compose -f $2 up -d
+	else
+	    echo docker-compose up -d
+	    sudo docker-compose up -d
+	fi
 	;;
     dcupgrade)
         compose_version=$(node -pe 'JSON.parse(process.argv[1]).name' "$(curl https://api.github.com/repos/docker/compose/releases/latest)")
